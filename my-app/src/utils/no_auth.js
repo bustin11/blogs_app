@@ -1,0 +1,26 @@
+// src/utils/no_auth.js
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+// Create axios instance
+const axiosNoAuthInstance = axios.create({
+  baseURL: 'http://localhost:8080/api/v0',  // Adjust baseURL to your API's URL
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  withCredentials: true, // Ensure cookies are sent along with requests
+});
+
+// Add a response interceptor to handle the 401 status code
+axiosNoAuthInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.data.status_code === 401) {
+      // Redirect to login on 401 error (Unauthorized or method not allowed)
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default axiosNoAuthInstance;
