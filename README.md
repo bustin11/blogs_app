@@ -1,6 +1,6 @@
 
 # What
-This application is used to keep track of your daily thoughts
+This application is used to keep track of your daily thoughts. Note that the textarea supports markdown format! So if you know markdown, it will be pretty cool to see.
 
 # Why 
 I had all these thoughts that I wanted to write down and search for, but I'm not good at keeping at it, so I made this to get started
@@ -48,7 +48,7 @@ From the _Setting up Backend_ section, you created a docker image and a containe
 cd ../meta
 psql -h localhost -p 5432 -U postgres -d blogs -f ~/tcp_server/meta/migrations.pgsql
 ```
-Now the migrations are all run!!
+The password is `password`. Now the migrations are all run!!
 
 ## Running the server
 Install Cargo, the build manager for Rust, which is the language of the Backend. Follow guide https://doc.rust-lang.org/cargo/getting-started/installation.html.
@@ -58,6 +58,7 @@ Ok now
 cd ../tcp_test
 cargo run --bin http_server # this will run the server on port 8080
 ```
+If this fails with some protobuf error, and you are on mac, try `brew install protobuf`
 
 ## Running the Frontend
 ```
