@@ -37,7 +37,10 @@ cd ../my-app # this contains the frontend service
 npm start # this should start
 ```
 
-if `npm start` fails, just install each dependency 1 by 1.
+if `npm start` fails, just install each dependency 1 by 1. Also, I needed react-scripts, so I followed this
+```
+https://stackoverflow.com/questions/47612580/react-scripts-command-not-found
+```
 
 ## Setting Postgres
 From the _Setting up Backend_ section, you created a docker image and a container to run a SQL database with a port exposed on localhost at 5432. We now need to setup Postgres to by creating some tables
