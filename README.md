@@ -64,3 +64,22 @@ npm start # this will start the typescript react app on port 3000
 Navigate to http://localhost:3000
 
 It should be intuitive how to login or signup, and once you're, you can play around with it to get a feel.
+
+# Searching
+## Create a blog
+Once you login, you will see 0 blogs and an empty search bar. On the top left you can go to the blog form page to submit a blog. After submitting, it will redirect you to blogs page where you can view your blogs.
+
+## How to search
+Once you have your blog, you can type any string, and it will match case insensitive to any part of the text in the blog. More specifically, the your search pattern will be matched against `heading`, `title`, `chapter`, `message`, `questions`. 
+
+## Advanced search
+By typing one of the things to search for, ie, `heading`, we can write a query like `heading: Corinthians`. We can also combine statements like so: `heading: Corinthians OR heading: Acts`. We can get fancier with parenthesis support: `(heading: Corinthians OR heading: Acts) AND chapter: 7`. Note that if errors pop up, ignore them, in fact, ignore any error, that's just a debug thing I was using to spot errors, but they don't mean anything. True errors are ones where the behavior is unexpected. 
+
+# Adding Tags
+You can add tags, which are globally unique to each user, into a bucket by pressing the `Add Tag Please` button on the top. Type the name of the tag, and hit submit. This button will also allow you to edit tag names, as well as delete tags and view the list of available tags. Once you created a tag, now you can add it to a blog by going underneath one of the blogs and adding it. It will show up on the bottom
+
+# Versions
+Any update of the blog will create a version, followed by the most recent version being showed. You can view all versions by clicking the `Versions` button to view the list of versions and when they were created. Click on one to view. Now that you are viewing one, you can revert to that version. IMPORTANT: If you revert to a version, your version history will be kept in tack, ie, you can see past **and** future versions. HOWEVER, if you edit a past version, the future versions will be **erased**
+
+# Contributions
+Please submit a PR

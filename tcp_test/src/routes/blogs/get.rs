@@ -33,7 +33,7 @@ pub async fn get_blogs(
                 Ok(x) => x,
                 Err(_x) => {
                     if !pat.is_empty() {
-                        format!("AND message ~* '{pat}' OR heading ~* '{pat}' OR title ~* '{pat}' OR chapter::text ~* '{pat}'")
+                        format!("AND message ~* '{pat}' OR heading ~* '{pat}' OR title ~* '{pat}' OR chapter::text ~* '{pat}' OR t.name ~* '{pat}'")
                     } else {
                         "AND TRUE".into()
                     }
