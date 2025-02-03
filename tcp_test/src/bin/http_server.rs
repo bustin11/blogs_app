@@ -19,7 +19,7 @@ async fn main() -> std::io::Result<()> {
 
 async fn run(tcp_listener: std::net::TcpListener) -> std::io::Result<actix_web::dev::Server> {
     let mut cfg = deadpool_postgres::Config::new();
-    cfg.dbname = Some("discord".to_string());
+    cfg.dbname = Some("blogs".to_string());
     cfg.manager = Some(deadpool_postgres::ManagerConfig {
         recycling_method: deadpool_postgres::RecyclingMethod::Fast,
     });
