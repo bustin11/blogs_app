@@ -15,10 +15,7 @@ pub async fn add_tag(
   ";
     let client = app_data.db_pool.get().await?;
     let res = client
-        .execute(
-            sql_string,
-            &[&session_data.user_id, &params.tag_name],
-        )
+        .execute(sql_string, &[&session_data.user_id, &params.tag_name])
         .await?;
     if res == 0 {
         Ok(HttpResponse::Ok().finish())

@@ -433,6 +433,33 @@ CREATE OR REPLACE TRIGGER add_version_to_blogs_history_trigger
   WHEN (NEW.active_version = OLD.active_version)
   EXECUTE FUNCTION add_version_to_blogs_history();
 
+CREATE OR REPLACE FUNCTION add_latest_version_to_blogs_history()
+  RETURNS TRIGGER
+  LANGUAGE plpgsql
+  AS $$
+  DECLARE
+    operation JSONB;
+    num_deleted BIGINT;
+  BEGIN
+
+      operation := jsonb_agg(OLD);
+
+      INSERT INTO blogs_history
+        (blog_id, operation, timestamp, version)
+      VALUES 
+        (OLD.id, operation, OLD.updated_on, OLD.active_version)
+      ON CONFLICT (blog_id, version) DO NOTHING;
+
+      RETURN NEW;
+  END;
+  $$;
+CREATE OR REPLACE TRIGGER add_latest_version_to_blogs_history_trigger
+  BEFORE UPDATE OF heading, title, chapter, message, question
+  ON blogs
+  FOR EACH ROW 
+  WHEN (OLD.active_version + 1 = OLD.num_versions AND NEW.active_version <> OLD.active_version)
+  EXECUTE FUNCTION add_latest_version_to_blogs_history();
+
 -- CREATE OR REPLACE FUNCTION decrement_num_blog_versions()
 --   RETURNS TRIGGER
 --   LANGUAGE plpgsql

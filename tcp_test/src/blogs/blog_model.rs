@@ -1,8 +1,6 @@
-
 use derive_more::derive::Debug;
 
 use super::tag_model::Tag;
-
 
 #[derive(serde::Deserialize, Debug, strum::Display, strum::EnumString)]
 #[strum(serialize_all = "snake_case")]
@@ -44,7 +42,6 @@ fn _default_order_by_() -> SortOrder {
     SortOrder::Desc
 }
 
-
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(untagged)]
 pub enum TestEnum {
@@ -75,7 +72,7 @@ pub struct Post {
     pub questions: Vec<String>,
     pub tags: Vec<Tag>,
     pub active_version: i64,
-    pub num_versions: i64
+    pub num_versions: i64,
 }
 
 #[derive(serde::Deserialize, serde::Serialize, Debug)]

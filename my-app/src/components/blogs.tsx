@@ -336,6 +336,7 @@ const Blogs: React.FC = () => {
               </>
             ) : (
               <>
+                {post.active_version} / {post.num_versions}
                 <h2>{post.heading || 'No Heading'}</h2>
                 <div className="meta-info">
                   <span className="chapter">{post.chapter || 'No Chapter'}</span>

@@ -1,4 +1,3 @@
-
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct ListVersionSingle {
     pub version_id: i64,

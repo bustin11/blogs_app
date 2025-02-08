@@ -14,10 +14,12 @@ pub enum Outline {
     Chapter,
     Message,
     Question,
-    Tag
+    Tag,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, Debug, strum::Display, strum::EnumString, Clone, Copy)]
+#[derive(
+    serde::Serialize, serde::Deserialize, Debug, strum::Display, strum::EnumString, Clone, Copy,
+)]
 #[strum(serialize_all = "snake_case")]
 pub enum Conjunction {
     // #[strum(serialize = "&")]
@@ -50,28 +52,20 @@ impl SingleFilter {
             Outline::Heading | Outline::Title | Outline::Message | Outline::Question => {
                 Ok(format!(
                     "to_tsvector({}) @@ websearch_to_tsquery('{}')",
-                    self.outline,
-                    self.ts_query
+                    self.outline, self.ts_query
                 ))
-            },
+            }
             Outline::Tag => {
                 // TODO(justin): this will only show matching tags, not all tags unfortunately
-                Ok(format!(
-                    "t.name ILIKE '%{}%'",
-                    self.ts_query
-                ))
-            },
+                Ok(format!("t.name ILIKE '%{}%'", self.ts_query))
+            }
             Outline::Chapter => {
                 if self.ts_query.parse::<i64>().is_ok() {
-                    Ok(format!(
-                        "{} = {}",
-                        self.outline,
-                        self.ts_query
-                    ))
+                    Ok(format!("{} = {}", self.outline, self.ts_query))
                 } else {
                     Err(MyError::new("Chapter is not integer :(", 400))
                 }
-            },
+            }
         }
     }
 }
@@ -84,25 +78,39 @@ pub enum Filters {
     Or(Rc<Filters>, Rc<Filters>),
 }
 
-
 impl Filters {
     pub fn to_sql_string(&self) -> Result<String, MyError> {
         match self {
-            Filters::Single(single_filter) => { single_filter.to_sql_string() }
-            Filters::And(left, right) => { Ok(format!("({} AND {})", left.to_sql_string()?, right.to_sql_string()?)) },
-            Filters::Or(left, right) => { Ok(format!("({} OR {})", left.to_sql_string()?, right.to_sql_string()?)) },
+            Filters::Single(single_filter) => single_filter.to_sql_string(),
+            Filters::And(left, right) => Ok(format!(
+                "({} AND {})",
+                left.to_sql_string()?,
+                right.to_sql_string()?
+            )),
+            Filters::Or(left, right) => Ok(format!(
+                "({} OR {})",
+                left.to_sql_string()?,
+                right.to_sql_string()?
+            )),
         }
     }
 }
 
 // fn parse_value(value: String) -> Result<TsQuery, MyError> {
-    
+
 // }
 
 fn parse_key_values(tokens: &mut Peekable<Tokens>) -> Result<Filters, MyError> {
-    match (tokens.next(), tokens.next().map(|x| x == ":"), tokens.next()) {
+    match (
+        tokens.next(),
+        tokens.next().map(|x| x == ":"),
+        tokens.next(),
+    ) {
         (Some(key), Some(true), Some(value)) => {
-            return Ok(Filters::Single(SingleFilter { outline: Outline::from_str(&key)?, ts_query: value }));
+            return Ok(Filters::Single(SingleFilter {
+                outline: Outline::from_str(&key)?,
+                ts_query: value,
+            }));
         }
         (x, y, z) => {
             println!("{x:?} {y:?} {z:?}");
@@ -111,7 +119,10 @@ fn parse_key_values(tokens: &mut Peekable<Tokens>) -> Result<Filters, MyError> {
     }
 }
 
-pub(super) fn parse_tokens(left_parens: &mut i64, tokens: &mut Peekable<Tokens>) -> Result<Option<Filters>, MyError> {
+pub(super) fn parse_tokens(
+    left_parens: &mut i64,
+    tokens: &mut Peekable<Tokens>,
+) -> Result<Option<Filters>, MyError> {
     let mut prev_filters: Option<Filters> = None;
     let mut conjunction: Option<Conjunction> = None;
     while let Some(token) = tokens.peek() {
@@ -140,7 +151,7 @@ pub(super) fn parse_tokens(left_parens: &mut i64, tokens: &mut Peekable<Tokens>)
                 }
                 *left_parens -= 1;
                 let _ = tokens.next();
-                return Ok(prev_filters);             
+                return Ok(prev_filters);
             }
             x => {
                 if let Ok(conj) = Conjunction::from_str(x) {
@@ -164,6 +175,5 @@ pub(super) fn parse_tokens(left_parens: &mut i64, tokens: &mut Peekable<Tokens>)
             }
         }
     }
-    return Ok(prev_filters)
+    return Ok(prev_filters);
 }
-

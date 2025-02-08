@@ -24,6 +24,8 @@ const BlogVersion: React.FC = () => {
     date: '',
     updated_on: '',
     post_id: blog_id || '',
+    active_version: 0,
+    num_versions: 1,
     tags: [],
   });
 

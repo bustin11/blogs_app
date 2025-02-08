@@ -1,4 +1,3 @@
-
 use actix_session::{storage::CookieSessionStore, SessionMiddleware};
 use actix_web::{cookie::Key, http, web};
 use tcp_test::{
@@ -6,7 +5,17 @@ use tcp_test::{
     middleware::SayHi,
     routes::{
         auth::{login, logout, ping::ping, sign_up::sign_up},
-        blogs::{delete::delete_blogs, get::get_blogs, list_versions::list_blog_versions, post::post_blogs, put::put_blogs, set_version::set_blog_version, tags::{add_tag::add_tag_to_blog, remove_tag::remove_tag_from_blog}, version::get_blog_version}, tags::{add::add_tag, delete::delete_tag, list::list_tags, update::update_tag},
+        blogs::{
+            delete::delete_blogs,
+            get::get_blogs,
+            list_versions::list_blog_versions,
+            post::post_blogs,
+            put::put_blogs,
+            set_version::set_blog_version,
+            tags::{add_tag::add_tag_to_blog, remove_tag::remove_tag_from_blog},
+            version::get_blog_version,
+        },
+        tags::{add::add_tag, delete::delete_tag, list::list_tags, update::update_tag},
     },
 };
 
@@ -73,26 +82,27 @@ async fn run(tcp_listener: std::net::TcpListener) -> std::io::Result<actix_web::
                     .wrap(SayHi)
                     .service(
                         web::resource("/blogs")
-                        .route(web::get().to(get_blogs))
-                        .route(web::post().to(post_blogs))
+                            .route(web::get().to(get_blogs))
+                            .route(web::post().to(post_blogs)),
                     )
                     .service(
                         web::resource("/tags")
-                        .route(web::post().to(add_tag))
-                        .route(web::get().to(list_tags))
+                            .route(web::post().to(add_tag))
+                            .route(web::get().to(list_tags)),
                     )
                     .service(
                         web::resource("/tags/{tag_id}")
-                        .route(web::put().to(update_tag))
-                        .route(web::delete().to(delete_tag))
+                            .route(web::put().to(update_tag))
+                            .route(web::delete().to(delete_tag)),
                     )
                     .service(
                         web::resource("/blogs/{post_id}")
                             .route(web::put().to(put_blogs))
                             .route(web::delete().to(delete_blogs)),
-                    ).service(
+                    )
+                    .service(
                         web::resource("/blogs/{post_id}/versions")
-                            .route(web::get().to(list_blog_versions))
+                            .route(web::get().to(list_blog_versions)),
                     )
                     .service(
                         web::resource("/blogs/{post_id}/tags/{tag_id}")
@@ -101,11 +111,11 @@ async fn run(tcp_listener: std::net::TcpListener) -> std::io::Result<actix_web::
                     )
                     .service(
                         web::resource("/blogs/{post_id}/version/{version_id}")
-                            .route(web::get().to(get_blog_version))
+                            .route(web::get().to(get_blog_version)),
                     )
                     .service(
                         web::resource("/blogs/{post_id}/version/{version_id}/set")
-                            .route(web::post().to(set_blog_version))
+                            .route(web::post().to(set_blog_version)),
                     ),
             )
             .wrap(

@@ -7,6 +7,8 @@ export interface Post {
   date: string; // or Date, depending on your needs
   updated_on: string;
   post_id: string;
+  active_version: number,
+  num_versions: number,
   tags: Tag[];
 }
 

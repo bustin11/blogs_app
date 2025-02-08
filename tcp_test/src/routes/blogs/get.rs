@@ -1,6 +1,10 @@
 use crate::{
     app_data::{AppData, MyError},
-    blogs::{blog_model::{BlogQueryParams, BlogResponse, Post}, filters::{parse_string, parser::Filters}, tag_model::Tag},
+    blogs::{
+        blog_model::{BlogQueryParams, BlogResponse, Post},
+        filters::{parse_string, parser::Filters},
+        tag_model::Tag,
+    },
     middleware::SessionData,
 };
 use actix_web::{web, HttpResponse};
@@ -69,7 +73,7 @@ pub async fn get_blogs(
           limit = params.page_size,
           sort_order = params.sort_order
       );
-      println!("sort order is {}", params.sort_order);
+        println!("sort order is {}", params.sort_order);
         // println!("sql string is {sql_string}");
         let rows = client
             .query(&sql_string, &[&session_data.user_id])
@@ -81,7 +85,10 @@ pub async fn get_blogs(
             num_blogs = row.try_get("num_blogs").unwrap();
             let tag_names: Vec<String> = row.try_get("tag_names").unwrap();
             let tag_ids: Vec<Uuid> = row.try_get("tag_ids").unwrap();
-            let tags = tag_names.into_iter().zip(tag_ids).map(|(name, id)| Tag { id, name });
+            let tags = tag_names
+                .into_iter()
+                .zip(tag_ids)
+                .map(|(name, id)| Tag { id, name });
             let questions: serde_json::Value = row.try_get("question").unwrap();
             posts.push(Post {
                 heading: row.try_get("heading").unwrap(),
@@ -94,10 +101,9 @@ pub async fn get_blogs(
                 questions: serde_json::from_value(questions).unwrap(),
                 active_version: row.try_get("active_version").unwrap(),
                 num_versions: row.try_get("num_versions").unwrap(),
-                tags: tags.collect()
+                tags: tags.collect(),
             });
         }
-
 
         let response = BlogResponse {
             size: num_blogs as usize,

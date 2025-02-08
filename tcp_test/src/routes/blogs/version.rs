@@ -1,18 +1,17 @@
 use crate::{
-  app_data::{AppData, MyError},
-  blogs::blog_model::{BlogVersionResponse, Post},
+    app_data::{AppData, MyError},
+    blogs::blog_model::{BlogVersionResponse, Post},
 };
 use actix_web::{web, HttpResponse};
 use uuid::Uuid;
 
 pub async fn get_blog_version(
-  app_data: web::Data<AppData>,
-  path: web::Path<(Uuid, i64)>,
+    app_data: web::Data<AppData>,
+    path: web::Path<(Uuid, i64)>,
 ) -> Result<HttpResponse, MyError> {
-  let (blog_id, version) = path.into_inner();
+    let (blog_id, version) = path.into_inner();
     let client = app_data.db_pool.get().await.unwrap();
-    let sql_string =
-      r#"SELECT 
+    let sql_string = r#"SELECT 
         operation #>> '{0, "message"}' AS message,
         operation #>> '{0, "heading"}' AS heading,
         operation #>> '{0, "title"}' AS title,
@@ -42,12 +41,9 @@ pub async fn get_blog_version(
         questions: serde_json::from_value(questions).unwrap(),
         active_version: version,
         num_versions: -1, // DOESN'T MATTER
-        tags: vec![] // DOESN't MATTER
+        tags: vec![],     // DOESN't MATTER
     };
 
-
-    let response = BlogVersionResponse {
-        post,
-    };
+    let response = BlogVersionResponse { post };
     Ok(HttpResponse::Ok().json(response))
 }

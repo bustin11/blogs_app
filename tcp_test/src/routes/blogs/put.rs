@@ -6,7 +6,7 @@ use crate::{
 use actix_web::{web, HttpResponse};
 
 // TODO(justin): update this endpoint to first
-/// 
+///
 pub async fn put_blogs(
     app_data: web::Data<AppData>,
     path: web::Path<uuid::Uuid>,
@@ -14,22 +14,22 @@ pub async fn put_blogs(
     session_data: SessionData,
 ) -> Result<HttpResponse, MyError> {
     let client = app_data.db_pool.get().await.unwrap();
-//     let sql_string = "
-//       INSERT INTO blogs
-//       (message, heading, title, chapter, question, id, user_id)
-//       VALUES
-//       ($1, $2, $3, $4, $5, $6, $7)
-//       ON CONFLICT (id)
-//       DO UPDATE
-//       SET 
-//       message = $1,
-//       heading = $2,
-//       title = $3,
-//       chapter = $4,
-//       question = $5,
-//       user_id = $7
-//   ";
-  let sql_string = "
+    //     let sql_string = "
+    //       INSERT INTO blogs
+    //       (message, heading, title, chapter, question, id, user_id)
+    //       VALUES
+    //       ($1, $2, $3, $4, $5, $6, $7)
+    //       ON CONFLICT (id)
+    //       DO UPDATE
+    //       SET
+    //       message = $1,
+    //       heading = $2,
+    //       title = $3,
+    //       chapter = $4,
+    //       question = $5,
+    //       user_id = $7
+    //   ";
+    let sql_string = "
     UPDATE blogs
     SET 
     message = $1,

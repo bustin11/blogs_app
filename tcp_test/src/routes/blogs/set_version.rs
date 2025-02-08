@@ -3,13 +3,12 @@ use actix_web::{web, HttpResponse};
 use uuid::Uuid;
 
 pub async fn set_blog_version(
-  app_data: web::Data<AppData>,
-  path: web::Path<(Uuid, i64)>,
+    app_data: web::Data<AppData>,
+    path: web::Path<(Uuid, i64)>,
 ) -> Result<HttpResponse, MyError> {
-  let (blog_id, version) = path.into_inner();
+    let (blog_id, version) = path.into_inner();
     let client = app_data.db_pool.get().await.unwrap();
-    let sql_string =
-      r#"
+    let sql_string = r#"
         UPDATE blogs SET 
           message = sq.message,
           heading = sq.heading,

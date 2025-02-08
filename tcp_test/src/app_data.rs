@@ -59,7 +59,7 @@ impl<E: Debug> From<deadpool::managed::PoolError<E>> for MyError {
 impl From<strum::ParseError> for MyError {
     fn from(value: strum::ParseError) -> Self {
         Self::new(value.to_string(), 400)
-    }    
+    }
 }
 
 impl MyError {

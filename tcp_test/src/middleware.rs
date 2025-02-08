@@ -1,5 +1,8 @@
 use std::{
-    error::Error, fmt::Debug, future::{ready, Future, Ready}, pin::Pin
+    error::Error,
+    fmt::Debug,
+    future::{ready, Future, Ready},
+    pin::Pin,
 };
 
 use actix_session::SessionExt;
@@ -78,16 +81,24 @@ where
                 Ok(response) => {
                     match response.response().error() {
                         Some(x) => {
-                            println!("[{}] from response, response is {:?}", x.error_response().status(), x.error_response().body());
-                        },
+                            println!(
+                                "[{}] from response, response is {:?}",
+                                x.error_response().status(),
+                                x.error_response().body()
+                            );
+                        }
                         None => {
                             println!("hi from response :)");
-                        },
+                        }
                     }
                     Ok(response)
                 }
                 Err(e) => {
-                    println!("[{}] Error is {:?}", e.error_response().status(), e.error_response());
+                    println!(
+                        "[{}] Error is {:?}",
+                        e.error_response().status(),
+                        e.error_response()
+                    );
                     Err(e)
                 }
             }
